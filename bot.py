@@ -7,9 +7,9 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ForceReply
 ########################🎊 Lisa | NT BOTS 🎊######################################################
 # Replace 'YOUR_API_ID', 'YOUR_API_HASH', and 'YOUR_BOT_TOKEN' with your actual values
-API_ID = ''
-API_HASH = ''
-BOT_TOKEN = ''
+API_ID = '4888076'
+API_HASH = '8b9b8214d84305d5ba8042c93575ea84'
+BOT_TOKEN = '7089896639:AAFrn6iJQ_Bntw93Jzb8YpGYtz1jUdmqD0g'
 # Skip Or add your proxy link
 HTTP_PROXY = ''
 youtube_dl_username = None  
