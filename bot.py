@@ -1,5 +1,6 @@
 # ©️ LISA-KOREA | @LISA_FAN_LK | NT_BOT_CHANNEL
 
+import os
 import logging
 import asyncio
 import yt_dlp
