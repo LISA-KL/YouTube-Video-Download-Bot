@@ -118,6 +118,7 @@ async def process_youtube_link(client, message):
                 sent_message = await app.send_video(message.chat.id, video=open(video_filename, 'rb'), caption=title)
 
 
+
                 # Delay for a few seconds and delete downloading and uploading
                 await asyncio.sleep(2)
                 await downloading_msg.delete()
