@@ -111,14 +111,14 @@ async def process_youtube_link(client, message):
             if title:
                 ydl.download([youtube_link])
 
-                # Uploading text message
-                uploading_msg = await message.reply_text("Uploading video...")
-
-                # Send the video file to the user
+                # Check if the video file exists
                 video_filename = f"downloaded_video_{info_dict['id']}.mp4"
-                try:
-                    with open(video_filename, 'rb') as video_file:
-                        sent_message = await app.send_video(message.chat.id, video=video_file, caption=title)
+                if os.path.exists(video_filename):
+                    # Uploading text message
+                    uploading_msg = await message.reply_text("Uploading video...")
+
+                    # Send the video file to the user
+                    sent_message = await app.send_video(message.chat.id, video=open(video_filename, 'rb'), caption=title)
 
                     # Delay for a few seconds and delete downloading and uploading
                     await asyncio.sleep(2)
@@ -127,8 +127,8 @@ async def process_youtube_link(client, message):
 
                     # Send successful upload message
                     await message.reply_text("\n\nOWNER : @LISA_FAN_LK 💕\n\nSUCCESSFULLY UPLOADED!")
-                except FileNotFoundError:
-                    logging.error(f"File {video_filename} not found.")
+                else:
+                    # Video file not found
                     await message.reply_text("Error: Video file not found.")
             else:
                 logging.error("No video streams found.")
@@ -137,6 +137,7 @@ async def process_youtube_link(client, message):
     except Exception as e:
         logging.exception("Error processing YouTube link: %s", e)
         await message.reply_text("Error: Failed to process the YouTube link. Please try again later.")
+
 
 # Start the bot
 print("🎊 I AM ALIVE 🎊")
