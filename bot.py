@@ -5,6 +5,7 @@ import asyncio
 import yt_dlp
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ForceReply
+
 ########################🎊 Lisa | NT BOTS 🎊######################################################
 # Replace 'YOUR_API_ID', 'YOUR_API_HASH', and 'YOUR_BOT_TOKEN' with your actual values
 API_ID = '4888076'
@@ -14,6 +15,7 @@ BOT_TOKEN = '7089896639:AAFrn6iJQ_Bntw93Jzb8YpGYtz1jUdmqD0g'
 HTTP_PROXY = ''
 youtube_dl_username = None  
 youtube_dl_password = None  
+
 ########################🎊 Lisa | NT BOTS 🎊######################################################
 # Create a Pyrogram client
 app = Client("my_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
@@ -53,7 +55,6 @@ async def about(client, message):
 # Start command handler
 @app.on_message(filters.private & filters.command("start"))
 async def start(client, message):
-    #user = message.from_user
     await message.reply_text(START_TXT.format(message.from_user.first_name), reply_markup=InlineKeyboardMarkup(
         [
             [
@@ -115,17 +116,20 @@ async def process_youtube_link(client, message):
 
                 # Send the video file to the user
                 video_filename = f"downloaded_video_{info_dict['id']}.mp4"
-                sent_message = await app.send_video(message.chat.id, video=open(video_filename, 'rb'), caption=title)
+                try:
+                    with open(video_filename, 'rb') as video_file:
+                        sent_message = await app.send_video(message.chat.id, video=video_file, caption=title)
 
+                    # Delay for a few seconds and delete downloading and uploading
+                    await asyncio.sleep(2)
+                    await downloading_msg.delete()
+                    await uploading_msg.delete()
 
-
-                # Delay for a few seconds and delete downloading and uploading
-                await asyncio.sleep(2)
-                await downloading_msg.delete()
-                await uploading_msg.delete()
-
-                # Send successful upload message
-                await message.reply_text("\n\nOWNER : @LISA_FAN_LK 💕\n\nSUCCESSFULLY UPLOADED!")
+                    # Send successful upload message
+                    await message.reply_text("\n\nOWNER : @LISA_FAN_LK 💕\n\nSUCCESSFULLY UPLOADED!")
+                except FileNotFoundError:
+                    logging.error(f"File {video_filename} not found.")
+                    await message.reply_text("Error: Video file not found.")
             else:
                 logging.error("No video streams found.")
                 await message.reply_text("Error: No downloadable video found.")
@@ -137,3 +141,4 @@ async def process_youtube_link(client, message):
 # Start the bot
 print("🎊 I AM ALIVE 🎊")
 app.run()
+
